@@ -7,7 +7,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const PORT = 3000;
-const uri = "mongodb://admin:admin123@127.0.0.1:27017/test?authSource=admin";
+const uri = "mongodb://admin:admin123@127.0.0.1:27017";
 
 const { MongoClient } = require("mongodb");
 let db;
