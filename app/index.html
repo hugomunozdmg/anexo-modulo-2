@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .post {
+        padding: 1rem;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="http://localhost:3000/data" method="get">
+      <input type="text" name="data1" />
+      <button type="submit">send</button>
+    </form>
+
+    <div>
+      <input type="text" id="data" />
+      <button onclick="send()">send</button>
+    </div>
+
+    <div id="post">
+      <input type="text" id="post-data" />
+      <button onclick="sendData()">send data</button>
+    </div>
+
+    <script>
+      function send() {
+        const data = document.getElementById("data").value;
+        fetch(`http://localhost:3000/data?data1=${data}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+
+      function sendData() {
+        let getData = document.getElementById("post-data").value;
+        console.log(getData);
+        fetch("http://localhost:3000/post-data", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: getData
+          })
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+    </script>
+  </body>
+</html>
