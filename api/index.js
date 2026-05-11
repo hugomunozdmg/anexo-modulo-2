@@ -1,11 +1,14 @@
 let express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv")
 
 const app = express();
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+dotenv.config()
 const PORT = 3000 || process.env.PORT
 const uri = `mongodb://admin:${process.env.PASSWORD}@127.0.0.1:27017`;
 
