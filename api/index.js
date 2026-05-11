@@ -6,8 +6,8 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-const PORT = 3000;
-const uri = "mongodb://admin:admin123@127.0.0.1:27017";
+const PORT = 3000 || process.env.PORT
+const uri = `mongodb://admin:${process.env.PASSWORD}@127.0.0.1:27017`;
 
 const { MongoClient } = require("mongodb");
 let db;
@@ -39,6 +39,46 @@ app.get("/data", (req, res) => {
 app.post("/post-data", (req, res) => {
   let data = req.body.data;
   db.collection("users").insertOne({ data: data });
-  
+
   res.send({ data });
 });
+
+//----------------
+const users = [];
+
+app.post("/registrar-usuario", (req, res) => {
+  let data = req.body;
+  let registered = checkUserExist(users, data);
+  let message = "";
+
+  if (!registered) {
+    users.push(data);
+    message = "register success";
+  } else {
+    message = "an account already exist with this email";
+  }
+
+  res.send({ user: data, message: message, status: 200 });
+});
+
+app.get("/usuarios", (req, res) => {
+  res.send(users);
+});
+
+app.get("/datos-usuario", (req, res) => {
+  let email = req.query.email;
+  let message = "";
+  let exist = checkUserExist(users, { email: email });
+  message = exist ? "user exist" : "user doesnt exist";
+
+  res.send({ message: message });
+});
+
+function checkUserExist(users, user) {
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].email == user.email) {
+      return true;
+    }
+  }
+  return false;
+}
